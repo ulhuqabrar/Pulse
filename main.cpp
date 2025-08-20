@@ -22,7 +22,7 @@ int main() {
     cout<< "Enter Minimum Number of Agents: ";
     cin >> minAgents;
     cout << "Enter Maximum Number of Agents: ";
-    cin >> maxAgents;
+    cin >> maxAgents
 
     srand(time(0));
     int range = rand() % (maxAgents - minAgents + 1) + minAgents;
