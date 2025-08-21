@@ -1,8 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <thread>
+#include <chrono>
 
 using namespace std;
+
+struct Agent
+{
+    int r, c, dr, dc;
+    char symbol;
+};
+
 int main() {
     auto lang = "C++";
     int N;
@@ -22,34 +31,65 @@ int main() {
     cout<< "Enter Minimum Number of Agents: ";
     cin >> minAgents;
     cout << "Enter Maximum Number of Agents: ";
-    cin >> maxAgents
+    cin >> maxAgents;
 
     srand(time(0));
     int range = rand() % (maxAgents - minAgents + 1) + minAgents;
     string symbols= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "0123456789"
-                    "!@#$%^&*?";
+                    "abcdefghijklmnopqrstuvwxyz";
 
-    vector <int> agents = {symbol, r, c, dr, dc}
+    cout << "Total number of agents: " << range << endl << endl;
 
+    vector<Agent> agents;
+
+    Agent a;
+    int r, c, dr, dc;
     for (int k = 0; k < range; k++) {
-        char agent = symbols[k % symbols.size()];
-        int i = rand()% N ;
-        int j = rand() % N ;
 
-        while (grid[i][j] != '.') {
-            i = rand() % N ;
-            j = rand() % N ;
-        } agent& agent = agents[i];
-            do {
-                 r = rand() % N;
-                c = rand() % N;
-            } while (grid[r][c] != '.');
+        do {
+            r = rand() % N;
+            c = rand() % N;
+        } while (grid[r][c] != '.');
 
-                let's do assigning position now
-        grid[i][j] = agent;
+        a.r =r;
+        a.c =c;
+        a.symbol = symbols[rand() % symbols.length()];
+
+        grid[r][c] = a.symbol;
+        agents.push_back(a);
     }
+    for (int i = 0; i < agents.size(); i++) {
+        do {
+            dr = rand() % N;
+            dc = rand() % N;
+        } while (grid[dr][dc] != '.');
+
+        agents[i].dr = dr;
+        agents[i].dc = dc;
+
+
+        grid [agents[i].dr][agents[i].dc] = '*';
+    }
+
+    for (int i = 0; i < agents.size(); i++) {
+        while (agents[i].r != agents[i].dr || agents[i].c != agents[i].dc) {
+            int ms = rand() % 1500;
+            this_thread::sleep_for(chrono::milliseconds(ms));
+            if (agents[i].r < agents[i].dr) {
+                agents[i].r++;
+            }
+            else if (agents[i].r > agents[i].dr) {
+                agents[i].r--;
+            }
+            if (agents[i].c < agents[i].dc) {
+                agents[i].c++;
+            }
+            else if (agents[i].c > agents[i].dc) {
+                agents[i].c--;
+            }
+        }
+    }
+
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cout <<grid[i][j] << "  ";
