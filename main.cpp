@@ -12,6 +12,18 @@ struct Agent
     char symbol;
 };
 
+void printGrid(const vector<vector<char>>& grid, int N) {
+    system("cls");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cout << grid[i][j] << "  ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+
 int main() {
     auto lang = "C++";
     int N;
@@ -20,7 +32,8 @@ int main() {
     cout << endl;
 
 
-    char grid[N][N];
+    vector<vector<char>> grid(N, vector<char>(N, '.'));
+;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             grid[i][j] ='.';
@@ -38,7 +51,10 @@ int main() {
     string symbols= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     "abcdefghijklmnopqrstuvwxyz";
 
-    cout << "Total number of agents: " << range << endl << endl;
+    cout << "Total number of agents: " << range ;
+
+    cout << endl;
+    cout << endl;
 
     vector<Agent> agents;
 
@@ -71,25 +87,34 @@ int main() {
         grid [agents[i].dr][agents[i].dc] = '*';
     }
 
-    for (int i = 0; i < agents.size(); i++) {
-        while (agents[i].r != agents[i].dr || agents[i].c != agents[i].dc) {
-            int ms = rand() % 1500;
-            this_thread::sleep_for(chrono::milliseconds(ms));
-            if (agents[i].r < agents[i].dr) {
-                agents[i].r++;
-            }
-            else if (agents[i].r > agents[i].dr) {
-                agents[i].r--;
-            }
-            if (agents[i].c < agents[i].dc) {
-                agents[i].c++;
-            }
-            else if (agents[i].c > agents[i].dc) {
-                agents[i].c--;
+    bool allReached = false;
+
+    while (!allReached) {
+        allReached = true;
+        for (int i = 0; i < agents.size(); i++) {
+            if (agents[i].r != agents[i].dr || agents[i].c != agents[i].dc) {
+                allReached = false;
+
+                int old_r = agents[i].r;
+                int old_c = agents[i].c;
+
+                if (agents[i].r < agents[i].dr) agents[i].r++;
+                else if (agents[i].r > agents[i].dr) agents[i].r--;
+
+                if (agents[i].c < agents[i].dc) agents[i].c++;
+                else if (agents[i].c > agents[i].dc) agents[i].c--;
+
+                grid[old_r][old_c] = '.';
+                grid[agents[i].r][agents[i].c] = agents[i].symbol;
+
+                // show movement
+                printGrid(grid, N);
+                this_thread::sleep_for(chrono::milliseconds(300));
+
             }
         }
     }
-//add update here
+
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cout <<grid[i][j] << "  ";
